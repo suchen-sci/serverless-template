@@ -1,0 +1,36 @@
+:root {
+	box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: inherit;
+}
+
+body,
+html {
+	-webkit-font-smoothing: unset !important;
+	font-family:
+		-apple-system,
+		system-ui,
+		Segoe UI,
+		Roboto,
+		Ubuntu,
+		Cantarell,
+		Noto Sans,
+		sans-serif,
+		BlinkMacSystemFont,
+		Helvetica Neue,
+		PingFang SC,
+		Hiragino Sans GB,
+		Microsoft YaHei,
+		Arial !important;
+}
+
+html {
+	font-size: 12px;
+	word-break: break-word;
+	text-rendering: optimizeLegibility;
+	color: #333;
+}
