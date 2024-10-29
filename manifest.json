@@ -15,7 +15,7 @@
 		"default_title": "点击打开测试工具"
 	},
 	"background": {
-		"service_worker": "src/background/spirit-api-tester-background.ts"
+		"service_worker": "src/background/index.ts"
 	},
 	"side_panel": {
 		"default_path": "src/side-panel/index.html"

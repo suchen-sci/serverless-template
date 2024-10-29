@@ -1,6 +1,11 @@
 {
 	"extends": "@vue/tsconfig/tsconfig.dom.json",
-	"include": ["src/**/*", "src/**/*.vue", "src/types/**/*.d.ts"],
+	"include": [
+		"src/**/*",
+		"src/**/*.vue",
+		"types/**/*.d.ts",
+		"node_modules/tdesign-vue-next/global.d.ts"
+	],
 	"exclude": ["src/**/__tests__/*"],
 	"compilerOptions": {
 		"composite": true,
@@ -8,7 +13,8 @@
 
 		"baseUrl": ".",
 		"paths": {
-			"@/*": ["./src/*"]
+			"@/*": ["./src/*"],
+			"@side-panel/*": ["./src/side-panel/*"]
 		}
 	}
 }

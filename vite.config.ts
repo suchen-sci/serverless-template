@@ -5,13 +5,41 @@ import vue from "@vitejs/plugin-vue";
 import { crx } from "@crxjs/vite-plugin";
 import manifest from "./manifest.json" assert { type: "json" };
 import { resolve } from "node:path";
+import AutoImport from "unplugin-auto-import/vite";
+import Components from "unplugin-vue-components/vite";
+import { TDesignResolver } from "unplugin-vue-components/resolvers";
 
 // https://vite.dev/config/
 export default defineConfig({
-	plugins: [vue(), crx({ manifest })],
+	plugins: [
+		vue(),
+		crx({ manifest }),
+		AutoImport({
+			imports: ["vue"],
+			resolvers: [
+				TDesignResolver({
+					library: "vue-next"
+				})
+			],
+			dts: "types/auto-imports.d.ts",
+			eslintrc: {
+				enabled: true,
+				filepath: "./.eslintrc-auto-import.cjs"
+			}
+		}),
+		Components({
+			resolvers: [
+				TDesignResolver({
+					library: "vue-next"
+				})
+			],
+			dts: "types/components.d.ts"
+		})
+	],
 	resolve: {
 		alias: {
-			"@": fileURLToPath(new URL("./src", import.meta.url))
+			"@": fileURLToPath(new URL("./src", import.meta.url)),
+			"@side-panel": fileURLToPath(new URL("./src/side-panel", import.meta.url))
 		}
 	},
 	css: {
