@@ -1,7 +1,7 @@
 <!--
  * @Author: mulingyuer
  * @Date: 2024-10-29 15:29:30
- * @LastEditTime: 2024-10-30 16:13:49
+ * @LastEditTime: 2024-10-30 17:22:08
  * @LastEditors: mulingyuer
  * @Description: base64图片组件
  * @FilePath: \serverless-api-tester\src\side-panel\components\Base64Image\index.vue
@@ -49,6 +49,7 @@
 import { MessagePlugin, type FormInstanceFunctions, type FormProps } from "tdesign-vue-next";
 import { request } from "@/request";
 import { useTools } from "@side-panel/hooks/useTools";
+import { ChromeMessageType } from "@/enums/chrome-message";
 
 export interface Form {
 	serverlessId: string;
@@ -120,7 +121,6 @@ async function initForm() {
 		timer = null;
 	}
 	const data = await getLocalFormData();
-	console.log("🚀 ~ initForm ~ data:", data);
 	if (!data.loading) {
 		baseUrl.value = data.baseUrl;
 		const keys = Object.keys(form.value) as (keyof Form)[];
@@ -143,6 +143,27 @@ async function saveForm() {
 	});
 }
 
+/** 监听背景消息，更新数据 */
+function onWatchBackgroundMessage() {
+	chrome.runtime.onMessage.addListener((message: CustomMessage, sender, sendResponse) => {
+		const { type, data } = message;
+
+		switch (type) {
+			case ChromeMessageType.NOTIFY_UPDATE_SERVERLESS_ID:
+				form.value.serverlessId = data;
+				break;
+			case ChromeMessageType.NOTIFY_UPDATE_API_KEY:
+				form.value.apiKey = data;
+				break;
+			case ChromeMessageType.NOTIFY_UPDATE_KEYWORD:
+				form.value.keyword = data;
+				break;
+		}
+
+		sendResponse(true);
+	});
+}
+
 /** 初始化 */
 async function init() {
 	try {
@@ -154,6 +175,7 @@ async function init() {
 
 onMounted(() => {
 	init();
+	onWatchBackgroundMessage();
 });
 </script>
 
