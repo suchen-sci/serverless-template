@@ -24,7 +24,8 @@ export default defineConfig({
 			dts: "types/auto-imports.d.ts",
 			eslintrc: {
 				enabled: true,
-				filepath: "./.eslintrc-auto-import.cjs"
+				filepath: "./.eslintrc-auto-import.cjs",
+				globalsPropValue: true
 			}
 		}),
 		Components({

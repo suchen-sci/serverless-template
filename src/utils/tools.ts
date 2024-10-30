@@ -1,7 +1,7 @@
 /*
  * @Author: mulingyuer
  * @Date: 2024-10-28 16:45:58
- * @LastEditTime: 2024-10-28 16:51:17
+ * @LastEditTime: 2024-10-30 16:26:09
  * @LastEditors: mulingyuer
  * @Description: 工具函数
  * @FilePath: \serverless-api-tester\src\utils\tools.ts
@@ -10,7 +10,7 @@
 
 /** 写入持久化数据 */
 export async function localStorageSet(key: string, value: any) {
-	chrome.storage.local.set({ key: value });
+	await chrome.storage.local.set({ [key]: value });
 }
 
 /** 获取持久化数据 */

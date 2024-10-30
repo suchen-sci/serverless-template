@@ -8,5 +8,11 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     TButton: typeof import('tdesign-vue-next')['Button']
+    TEmpty: typeof import('tdesign-vue-next')['Empty']
+    TForm: typeof import('tdesign-vue-next')['Form']
+    TFormItem: typeof import('tdesign-vue-next')['FormItem']
+    TImage: typeof import('tdesign-vue-next')['Image']
+    TInput: typeof import('tdesign-vue-next')['Input']
+    TTextarea: typeof import('tdesign-vue-next')['Textarea']
   }
 }

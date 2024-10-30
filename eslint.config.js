@@ -1,8 +1,7 @@
 import pluginVue from "eslint-plugin-vue";
 import vueTsEslintConfig from "@vue/eslint-config-typescript";
 import skipFormatting from "@vue/eslint-config-prettier/skip-formatting";
-import { rules } from "eslint-plugin-vue";
-import AutoImport from "./.eslintrc-auto-import";
+import AutoImport from "./.eslintrc-auto-import.cjs";
 
 export default [
 	{
@@ -26,14 +25,17 @@ export default [
 				}
 			},
 			globals: {
-				...autoImport.globals
+				...AutoImport.globals
 			}
 		}
 	},
 	...pluginVue.configs["flat/essential"],
 	...vueTsEslintConfig(),
 	skipFormatting,
-	rules({
-		"@typescript-eslint/no-explicit-any": "off"
-	})
+	{
+		rules: {
+			"@typescript-eslint/no-explicit-any": "off",
+			"vue/multi-word-component-names": "off"
+		}
+	}
 ];

@@ -10,7 +10,7 @@
 		"48": "images/icon-48.png",
 		"128": "images/icon-128.png"
 	},
-	"permissions": ["sidePanel", "storage"],
+	"permissions": ["sidePanel", "storage", "nativeMessaging", "notifications"],
 	"action": {
 		"default_title": "点击打开测试工具"
 	},

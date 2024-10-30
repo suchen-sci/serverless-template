@@ -1,7 +1,7 @@
 /*
  * @Author: mulingyuer
  * @Date: 2024-10-28 16:52:00
- * @LastEditTime: 2024-10-29 11:52:13
+ * @LastEditTime: 2024-10-30 11:03:30
  * @LastEditors: mulingyuer
  * @Description: 背景脚本类型声明
  * @FilePath: \serverless-api-tester\src\background\types.ts
@@ -35,3 +35,6 @@ export interface SpiritApiTester {
 	/** 初始化命名空间 */
 	init: () => Promise<void> | void;
 }
+
+/** 监听消息的回调函数类型 */
+export type ListenerMessageCallback = Parameters<typeof chrome.runtime.onMessage.addListener>[0];
