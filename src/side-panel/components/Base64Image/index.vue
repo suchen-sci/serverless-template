@@ -1,7 +1,7 @@
 <!--
  * @Author: mulingyuer
  * @Date: 2024-10-29 15:29:30
- * @LastEditTime: 2024-10-30 17:22:08
+ * @LastEditTime: 2024-10-31 16:20:20
  * @LastEditors: mulingyuer
  * @Description: base64图片组件
  * @FilePath: \serverless-api-tester\src\side-panel\components\Base64Image\index.vue
@@ -16,12 +16,32 @@
 			<t-form-item label="API key" name="apiKey">
 				<t-input v-model="form.apiKey" placeholder="请输入API key"></t-input>
 			</t-form-item>
-			<t-form-item label="关键词" name="keyword">
+			<t-form-item label="关键词" name="keywords">
 				<t-textarea
-					v-model="form.keyword"
+					v-model="form.keywords"
 					placeholder="请输入关键词，英文逗号分隔"
 					:autosize="{ minRows: 5, maxRows: 5 }"
 				/>
+			</t-form-item>
+			<t-form-item>
+				<t-row :gutter="16">
+					<t-col :span="6">
+						<t-form-item label="宽度" name="width" label-align="left" label-width="auto">
+							<t-input v-model.number="form.width" placeholder="请输入宽度"></t-input>
+						</t-form-item>
+					</t-col>
+					<t-col :span="6">
+						<t-form-item label="高度" name="height" label-align="left" label-width="auto">
+							<t-input v-model.number="form.height" placeholder="请输入高度"></t-input>
+						</t-form-item>
+					</t-col>
+				</t-row>
+			</t-form-item>
+			<t-form-item label="选择模型" name="isLarge">
+				<t-radio-group v-model="form.isLarge">
+					<t-radio :value="true">SD3.5 Large</t-radio>
+					<t-radio :value="false">SD3.5 Medium</t-radio>
+				</t-radio-group>
 			</t-form-item>
 			<t-form-item>
 				<t-button theme="primary" type="submit" size="large" block :loading="loading">
@@ -48,27 +68,44 @@
 <script setup lang="ts">
 import { MessagePlugin, type FormInstanceFunctions, type FormProps } from "tdesign-vue-next";
 import { request } from "@/request";
-import { useTools } from "@side-panel/hooks/useTools";
-import { ChromeMessageType } from "@/enums/chrome-message";
+// import { useTools } from "@side-panel/hooks/useTools";
+// import { ChromeMessageType } from "@/enums/chrome-message";
+import { useServerlessStore, useTextToImgStore } from "@side-panel/stores";
+import { chromeMessage, EventName } from "@/utils/chrome-message";
+import type { EventCallback } from "@/utils/chrome-message";
 
 export interface Form {
 	serverlessId: string;
 	apiKey: string;
-	keyword: string;
+	/** 关键词 */
+	keywords: string;
+	/** 宽度 */
+	width: number;
+	/** 高度 */
+	height: number;
+	/** 模型切换，true为sd3.5_large，false为sd3.5_medium */
+	isLarge: boolean;
 }
 
-const { getLocalFormData, setLocalFormData } = useTools();
-const baseUrl = ref("");
+const serverlessStore = useServerlessStore();
+const textToImgStore = useTextToImgStore();
+
 const formInstance = ref<FormInstanceFunctions>();
 const form = ref<Form>({
 	serverlessId: "",
 	apiKey: "",
-	keyword: ""
+	keywords: "",
+	width: 512,
+	height: 512,
+	isLarge: true
 });
 const rules: FormProps["rules"] = {
 	serverlessId: [{ required: true, message: "请填写ServerLess ID", trigger: "blur" }],
 	apiKey: [{ required: true, message: "请填写API key", trigger: "blur" }],
-	keyword: [{ required: true, message: "请填写关键词", trigger: "blur" }]
+	keywords: [{ required: true, message: "请填写关键词", trigger: "blur" }],
+	width: [{ required: true, message: "请填写宽度", trigger: "blur" }],
+	height: [{ required: true, message: "请填写高度", trigger: "blur" }],
+	isLarge: [{ required: true, message: "请选择模型", trigger: "blur" }]
 };
 const loading = ref(false);
 const isImg = ref(true);
@@ -85,13 +122,20 @@ const onSubmit: FormProps["onSubmit"] = async ({ validateResult }) => {
 		// api请求
 		const resString = await request
 			.post<string>(`${form.value.serverlessId}/sync`, {
-				prefixUrl: baseUrl.value,
+				prefixUrl: serverlessStore.baseUrl,
 				headers: {
 					"Content-Type": "application/json",
 					Authorization: `Bearer ${form.value.apiKey}`
 				},
 				body: JSON.stringify({
-					input: { prompt: form.value.keyword }
+					input: {
+						prompt: JSON.stringify({
+							keywords: form.value.keywords,
+							width: form.value.width,
+							height: form.value.height,
+							isLarge: form.value.isLarge
+						})
+					}
 				})
 			})
 			.json();
@@ -112,56 +156,61 @@ const onSubmit: FormProps["onSubmit"] = async ({ validateResult }) => {
 	}
 };
 
-/** 定时器 */
-let timer: null | number = null;
-/** 获取缓存数据并填充表单 */
-async function initForm() {
-	if (timer) {
-		clearTimeout(timer);
-		timer = null;
-	}
-	const data = await getLocalFormData();
-	if (!data.loading) {
-		baseUrl.value = data.baseUrl;
-		const keys = Object.keys(form.value) as (keyof Form)[];
-		keys.forEach((key) => {
-			form.value[key] = data[key];
-		});
-	} else {
-		timer = setTimeout(() => {
-			initForm();
-		}, 300);
-	}
+/** 初始化表单 */
+function initForm() {
+	form.value.serverlessId = serverlessStore.serverlessId;
+	form.value.apiKey = serverlessStore.apiKey;
+	form.value.keywords = textToImgStore.keyword;
 }
 
 /** 存储缓存数据 */
-async function saveForm() {
-	await setLocalFormData({
-		apiKey: form.value.apiKey,
-		serverlessId: form.value.serverlessId,
-		keyword: form.value.keyword
-	});
+function saveForm() {
+	serverlessStore.setServerlessId(form.value.serverlessId);
+	serverlessStore.setApiKey(form.value.apiKey);
+	textToImgStore.setKeyword(form.value.keywords);
 }
 
-/** 监听背景消息，更新数据 */
-function onWatchBackgroundMessage() {
-	chrome.runtime.onMessage.addListener((message: CustomMessage, sender, sendResponse) => {
-		const { type, data } = message;
+/** 填充Serverless ID回调 */
+const fillServerlessId: EventCallback = (message) => {
+	const { data } = message;
+	if (!data) return;
+	form.value.serverlessId = data;
+	serverlessStore.setServerlessId(data);
+};
 
-		switch (type) {
-			case ChromeMessageType.NOTIFY_UPDATE_SERVERLESS_ID:
-				form.value.serverlessId = data;
-				break;
-			case ChromeMessageType.NOTIFY_UPDATE_API_KEY:
-				form.value.apiKey = data;
-				break;
-			case ChromeMessageType.NOTIFY_UPDATE_KEYWORD:
-				form.value.keyword = data;
-				break;
-		}
+/** 填充API key回调 */
+const fillApiKey: EventCallback = (message) => {
+	const { data } = message;
+	if (!data) return;
+	form.value.apiKey = data;
+	serverlessStore.setApiKey(data);
+};
 
-		sendResponse(true);
-	});
+/** 填充关键词回调 */
+const fillKeyword: EventCallback = (message) => {
+	const { data } = message;
+	if (!data) return;
+	form.value.keywords = data;
+	textToImgStore.setKeyword(data);
+};
+
+/** 监听上下文菜单事件 */
+function onContextMenu() {
+	/** 填充Serverless ID */
+	chromeMessage.on(EventName.FILL_SERVERLESS_ID, fillServerlessId);
+
+	/** 填充API key */
+	chromeMessage.on(EventName.FILL_API_KEY, fillApiKey);
+
+	/** 填充关键词 */
+	chromeMessage.on(EventName.FIL_TEXT_TO_IMAGE_KEYWORD, fillKeyword);
+}
+
+/** 解除监听上下文菜单事件 */
+function offContextMenu() {
+	chromeMessage.off(EventName.FILL_SERVERLESS_ID, fillServerlessId);
+	chromeMessage.off(EventName.FILL_API_KEY, fillApiKey);
+	chromeMessage.off(EventName.FIL_TEXT_TO_IMAGE_KEYWORD, fillKeyword);
 }
 
 /** 初始化 */
@@ -175,7 +224,11 @@ async function init() {
 
 onMounted(() => {
 	init();
-	onWatchBackgroundMessage();
+	onContextMenu();
+});
+
+onUnmounted(() => {
+	offContextMenu();
 });
 </script>
 
