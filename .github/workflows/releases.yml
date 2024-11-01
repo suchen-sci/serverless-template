@@ -12,13 +12,45 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 检查node版本
-        run: node -v
+      - name: 克隆代码
+        uses: actions/checkout@v2
+        with:
+          ref: main # 指定主分支
 
-      - name: 检查pnpm版本
-        run: pnpm -v
+      - name: 指定Node.js版本
+        uses: actions/setup-node@v2
+        with:
+          node-version: "20.17.0"
 
-      # - name: 克隆代码
-      #   uses: actions/checkout@v2
-      #   with:
-      #     ref: main # 指定主分支
+      - name: 安装pnpm
+        run: npm install -g pnpm@latest
+
+      - name: 安装依赖
+        run: pnpm install
+
+      - name: 打包插件
+        run: pnpm run build
+
+      - name: 创建zip文件
+        run: |
+          zip -r ./serverless-api-tester-extend.zip ./dist
+
+      - name: 获取新版本号
+        id: get_version
+        run: |
+          # 获取最新标签，如果没有则返回一个默认版本
+          VERSION=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.1")
+          echo "VERSION=${VERSION}" >> $GITHUB_ENV
+          echo "New version:${VERSION}"
+
+      - name: 创建Release
+        id: create_release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.VERSION }}
+          release_name: Release ${{ env.VERSION }}
+          draft: false
+          prerelease: false
+          files: ./serverless-api-tester-extend.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACTIONS_TOKEN }}

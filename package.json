@@ -11,7 +11,10 @@
 		"build-only": "vite build",
 		"type-check": "vue-tsc --build --force",
 		"lint": "eslint . --fix",
-		"format": "prettier --write src/"
+		"format": "prettier --write src/",
+		"version:patch": "pnpm version path",
+		"version:minor": "pnpm version minor",
+		"version:major": "pnpm version major"
 	},
 	"dependencies": {
 		"@crxjs/vite-plugin": "2.0.0-beta.28",
