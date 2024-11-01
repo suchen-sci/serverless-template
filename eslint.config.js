@@ -14,7 +14,17 @@ export default [
 		ignores: ["**/dist/**", "**/dist-ssr/**", "**/coverage/**"]
 	},
 	{
-		ignores: [".vscode", "node_modules", "*.md", "*.woff", "*.ttf", ".idea", "dist", ".husky"],
+		ignores: [
+			".vscode",
+			"node_modules",
+			"*.md",
+			"*.woff",
+			"*.ttf",
+			".idea",
+			"dist",
+			".husky",
+			"serverless-demo"
+		],
 		files: ["**/*.{js,ts,mjs,mts,cjs,cts,jsx,tsx,vue}"],
 		languageOptions: {
 			parserOptions: {
