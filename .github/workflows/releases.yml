@@ -20,7 +20,7 @@ jobs:
       - name: 指定Node.js版本
         uses: actions/setup-node@v3
         with:
-          node-version: "20.17.0"
+          node-version: "20" # 指定 Node.js 20 版本
 
       - name: 安装pnpm
         run: npm install -g pnpm@latest
@@ -48,7 +48,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ env.VERSION }}
-          release_name: Release ${{ env.VERSION }}
+          name: Release ${{ env.VERSION }}
           draft: false
           prerelease: false
           files: ./serverless-api-tester-extend.zip
