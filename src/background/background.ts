@@ -1,14 +1,13 @@
 /*
  * @Author: mulingyuer
  * @Date: 2024-10-28 16:44:12
- * @LastEditTime: 2024-10-31 15:29:39
+ * @LastEditTime: 2024-11-01 17:41:42
  * @LastEditors: mulingyuer
  * @Description: 背景脚本
- * @FilePath: \serverless-api-tester\src\background\index.ts
+ * @FilePath: \serverless-api-tester\src\background\background.ts
  * 怎么可能会有bug！！！
  */
-
-import { ContextMenus } from "./context-menus";
+import { contextMenus } from "./context-menus";
 
 /** 初始化侧边栏 */
 function initSidePanel() {
@@ -21,7 +20,7 @@ chrome.runtime.onInstalled.addListener(async () => {
 	// 初始化侧边栏
 	initSidePanel();
 	// 初始化菜单
-	new ContextMenus().init();
+	contextMenus.init();
 });
 
 /** 插件启用 */
@@ -29,5 +28,5 @@ chrome.runtime.onStartup.addListener(async () => {
 	// 初始化侧边栏
 	initSidePanel();
 	// 初始化菜单
-	new ContextMenus().init();
+	contextMenus.init();
 });

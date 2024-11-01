@@ -1,10 +1,10 @@
 <!--
  * @Author: mulingyuer
  * @Date: 2024-10-29 15:29:30
- * @LastEditTime: 2024-10-31 16:20:20
+ * @LastEditTime: 2024-11-01 17:13:07
  * @LastEditors: mulingyuer
  * @Description: base64图片组件
- * @FilePath: \serverless-api-tester\src\side-panel\components\Base64Image\index.vue
+ * @FilePath: \serverless-api-tester\src\side-panel\components\ServerlessComfyui\index.vue
  * 怎么可能会有bug！！！
 -->
 <template>
@@ -73,6 +73,7 @@ import { request } from "@/request";
 import { useServerlessStore, useTextToImgStore } from "@side-panel/stores";
 import { chromeMessage, EventName } from "@/utils/chrome-message";
 import type { EventCallback } from "@/utils/chrome-message";
+import { ContextMenuEnum } from "@/background/context-menus";
 
 export interface Form {
 	serverlessId: string;
@@ -175,7 +176,6 @@ const fillServerlessId: EventCallback = (message) => {
 	const { data } = message;
 	if (!data) return;
 	form.value.serverlessId = data;
-	serverlessStore.setServerlessId(data);
 };
 
 /** 填充API key回调 */
@@ -183,7 +183,6 @@ const fillApiKey: EventCallback = (message) => {
 	const { data } = message;
 	if (!data) return;
 	form.value.apiKey = data;
-	serverlessStore.setApiKey(data);
 };
 
 /** 填充关键词回调 */
@@ -191,7 +190,6 @@ const fillKeyword: EventCallback = (message) => {
 	const { data } = message;
 	if (!data) return;
 	form.value.keywords = data;
-	textToImgStore.setKeyword(data);
 };
 
 /** 监听上下文菜单事件 */
@@ -203,14 +201,17 @@ function onContextMenu() {
 	chromeMessage.on(EventName.FILL_API_KEY, fillApiKey);
 
 	/** 填充关键词 */
-	chromeMessage.on(EventName.FIL_TEXT_TO_IMAGE_KEYWORD, fillKeyword);
+	chromeMessage.on(EventName.SERVERLESS_COMFYUI_FILL_KEYWORD, fillKeyword);
+
+	/** 创建上下文菜单 */
+	chromeMessage.emit(EventName.CREATE_CONTEXT_MENUS, ContextMenuEnum.CREATE_SERVERLESS_COMFYUI);
 }
 
 /** 解除监听上下文菜单事件 */
 function offContextMenu() {
 	chromeMessage.off(EventName.FILL_SERVERLESS_ID, fillServerlessId);
 	chromeMessage.off(EventName.FILL_API_KEY, fillApiKey);
-	chromeMessage.off(EventName.FIL_TEXT_TO_IMAGE_KEYWORD, fillKeyword);
+	chromeMessage.off(EventName.SERVERLESS_COMFYUI_FILL_KEYWORD, fillKeyword);
 }
 
 /** 初始化 */

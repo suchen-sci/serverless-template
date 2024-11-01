@@ -1,7 +1,7 @@
 <!--
  * @Author: mulingyuer
  * @Date: 2024-10-28 16:58:06
- * @LastEditTime: 2024-10-31 15:31:15
+ * @LastEditTime: 2024-11-01 16:53:30
  * @LastEditors: mulingyuer
  * @Description: app
  * @FilePath: \serverless-api-tester\src\side-panel\App.vue
@@ -9,12 +9,12 @@
 -->
 <template>
 	<div class="side-panel">
-		<Base64Image />
+		<ServerlessComfyui />
 	</div>
 </template>
 
 <script setup lang="ts">
-import Base64Image from "@side-panel/components/Base64Image/index.vue";
+import ServerlessComfyui from "@side-panel/components/ServerlessComfyui/index.vue";
 </script>
 
 <style lang="scss" scoped>

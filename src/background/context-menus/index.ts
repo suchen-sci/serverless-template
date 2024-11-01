@@ -1,62 +1,47 @@
 /*
  * @Author: mulingyuer
  * @Date: 2024-10-31 15:22:41
- * @LastEditTime: 2024-10-31 15:28:37
+ * @LastEditTime: 2024-11-01 17:42:04
  * @LastEditors: mulingyuer
  * @Description: 上下文菜单
  * @FilePath: \serverless-api-tester\src\background\context-menus\index.ts
  * 怎么可能会有bug！！！
  */
+import { chromeContextMenu } from "@/utils/chrome-context-menus.ts";
 import { chromeMessage, EventName } from "@/utils/chrome-message";
+import { ContextMenuEnum } from "./context-menu-enum";
+import { generateMensListStrategy } from "./generate-mens-list-strategy";
+export * from "./context-menu-enum";
 
 export class ContextMenus {
 	private isInit = false;
 
 	/** 初始化 */
 	public init() {
-		if (this.isInit) {
-			return;
-		}
-		this.textToImageMenus();
+		if (this.isInit) return;
+		this.watchCreateMenus();
 		this.isInit = true;
 	}
 
-	/** 图片转文字菜单 */
-	private textToImageMenus() {
-		chrome.contextMenus.create({
-			id: "serverlessId",
-			title: "填入Serverless ID",
-			contexts: ["selection"] // 只有在选中文本时才会出现
-		});
+	/** 监听创建菜单事件 */
+	private watchCreateMenus() {
+		chromeMessage.on(EventName.CREATE_CONTEXT_MENUS, (message) => {
+			const data = message.data as ContextMenuEnum;
+			if (!data) return;
 
-		chrome.contextMenus.create({
-			id: "apiKey",
-			title: "填入API key",
-			contexts: ["selection"] // 只有在选中文本时才会出现
-		});
+			const strategy = generateMensListStrategy[data];
+			if (typeof strategy !== "function") return;
 
-		chrome.contextMenus.create({
-			id: "keyword",
-			title: "填入关键词",
-			contexts: ["selection"] // 只有在选中文本时才会出现
-		});
+			// 清除之前的菜单
+			chromeContextMenu.removeAll();
 
-		// 监听菜单事件
-		chrome.contextMenus.onClicked.addListener((info) => {
-			const { menuItemId, selectionText } = info;
-			const data = selectionText ?? "";
-
-			switch (menuItemId) {
-				case "serverlessId":
-					chromeMessage.emit(EventName.FILL_SERVERLESS_ID, data);
-					break;
-				case "apiKey":
-					chromeMessage.emit(EventName.FILL_API_KEY, data);
-					break;
-				case "keyword":
-					chromeMessage.emit(EventName.FIL_TEXT_TO_IMAGE_KEYWORD, data);
-					break;
-			}
+			// 从策略中取得菜单列表数据并创建菜单
+			const menuList = strategy();
+			menuList.forEach((item) => {
+				chromeContextMenu.create(item);
+			});
 		});
 	}
 }
+
+export const contextMenus = new ContextMenus();

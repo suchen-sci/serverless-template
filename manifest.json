@@ -22,7 +22,7 @@
 		"default_title": "点击打开测试工具"
 	},
 	"background": {
-		"service_worker": "src/background/index.ts"
+		"service_worker": "src/background/background.ts"
 	},
 	"side_panel": {
 		"default_path": "src/side-panel/index.html"

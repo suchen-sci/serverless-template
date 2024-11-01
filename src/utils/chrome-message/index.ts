@@ -1,7 +1,7 @@
 /*
  * @Author: mulingyuer
  * @Date: 2024-10-31 11:40:20
- * @LastEditTime: 2024-10-31 15:25:39
+ * @LastEditTime: 2024-11-01 15:45:25
  * @LastEditors: mulingyuer
  * @Description: 谷歌插件事件订阅
  * @FilePath: \serverless-api-tester\src\utils\chrome-message\index.ts
@@ -10,7 +10,7 @@
 import { EventName } from "./event-name";
 import type { EventMap, EventMessage, EventCallback } from "./types";
 export type * from "./types";
-export { EventName };
+export * from "./event-name";
 
 class ChromeMessage {
 	private events: EventMap = new Map();
