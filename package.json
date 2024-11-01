@@ -1,6 +1,6 @@
 {
 	"name": "serverless-api-tester",
-	"version": "0.0.0",
+	"version": "0.0.1",
 	"private": true,
 	"type": "module",
 	"scripts": {
@@ -12,9 +12,7 @@
 		"type-check": "vue-tsc --build --force",
 		"lint": "eslint . --fix",
 		"format": "prettier --write src/",
-		"version:patch": "pnpm version path",
-		"version:minor": "pnpm version minor",
-		"version:major": "pnpm version major"
+		"version:update": "npx bumpp --no-commit --no-tag --no-push"
 	},
 	"dependencies": {
 		"@crxjs/vite-plugin": "2.0.0-beta.28",
@@ -34,6 +32,7 @@
 		"@vue/eslint-config-prettier": "^10.0.0",
 		"@vue/eslint-config-typescript": "^14.1.1",
 		"@vue/tsconfig": "^0.5.1",
+		"bumpp": "^9.8.0",
 		"eslint": "^9.13.0",
 		"eslint-plugin-vue": "^9.29.0",
 		"npm-run-all2": "^7.0.1",
