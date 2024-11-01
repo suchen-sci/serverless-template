@@ -1,0 +1,24 @@
+name: 打包插件并发布到Releases
+
+# 检测只有主分支的push操作会触发该工作流
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: 打包工作
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 检查node版本
+        run: node -v
+
+      - name: 检查pnpm版本
+        run: pnpm -v
+
+      # - name: 克隆代码
+      #   uses: actions/checkout@v2
+      #   with:
+      #     ref: main # 指定主分支
