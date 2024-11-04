@@ -27,28 +27,28 @@ jobs:
 
       - name: 安装依赖
         run: |
-          cd chrome-extend
+          cd chrome-extension
           pnpm install
 
       - name: 打包插件
         run: |
-          cd chrome-extend  
+          cd chrome-extension  
           pnpm run build
 
       - name: 创建谷歌浏览器扩展zip文件
         run: |
-          cd chrome-extend
-          zip -r ../chrome-extend.zip ./dist
+          cd chrome-extension
+          zip -r ../chrome-extension.zip ./dist
 
       - name: 创建serverless模版zip文件
         run: |
           zip -r ./serverless-template.zip ./serverless-template
 
       - name: 获取新版本号
-        id: get_chrome_extend_version
+        id: get_chrome_extension_version
         run: |
           # 尝试从 package.json 中获取版本号
-          VERSION=$(node -p "require('./chrome-extend/package.json').version" 2>/dev/null || echo "v0.0.1")
+          VERSION=$(node -p "require('./chrome-extension/package.json').version" 2>/dev/null || echo "v0.0.1")
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
           echo "New version:${VERSION}"
 
@@ -61,7 +61,7 @@ jobs:
           draft: false
           prerelease: false
           files: |
-            ./chrome-extend.zip
+            ./chrome-extension.zip
             ./serverless-template.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
