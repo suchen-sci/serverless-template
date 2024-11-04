@@ -38,7 +38,7 @@ jobs:
       - name: 创建谷歌浏览器扩展zip文件
         run: |
           cd chrome-extend
-          zip -r ./chrome-extend.zip ./dist
+          zip -r ../chrome-extend.zip ./dist
 
       - name: 创建serverless模版zip文件
         run: |
