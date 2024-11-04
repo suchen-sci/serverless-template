@@ -31,15 +31,19 @@ jobs:
       - name: 打包插件
         run: pnpm run build
 
-      - name: 创建zip文件
+      - name: 创建谷歌浏览器扩展zip文件
         run: |
-          zip -r ./serverless-api-tester-extend.zip ./dist
+          zip -r ./chrome-extend.zip ./chrome-extend/dist
+
+      - name: 创建serverless模版zip文件
+        run: |
+          zip -r ./serverless-template.zip ./serverless-template
 
       - name: 获取新版本号
-        id: get_version
+        id: get_chrome_extend_version
         run: |
-          # 获取最新标签，如果没有则返回一个默认版本
-          VERSION=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.1")
+          # 尝试从 package.json 中获取版本号
+          VERSION=$(node -p "require('./chrome-extend/package.json').version" 2>/dev/null || echo "v0.0.1")
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
           echo "New version:${VERSION}"
 
@@ -51,6 +55,8 @@ jobs:
           name: Release ${{ env.VERSION }}
           draft: false
           prerelease: false
-          files: ./serverless-api-tester-extend.zip
+          files: |
+            ./chrome-extend.zip
+            ./serverless-template.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
