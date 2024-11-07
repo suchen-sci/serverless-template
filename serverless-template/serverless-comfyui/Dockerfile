@@ -52,6 +52,8 @@ RUN curl -L 'https://huggingface.co/Comfy-Org/stable-diffusion-3.5-fp8/resolve/m
 
 RUN curl -L 'https://huggingface.co/Comfy-Org/stable-diffusion-3.5-fp8/resolve/main/text_encoders/t5xxl_fp8_e4m3fn_scaled.safetensors?download=true' -o /workspace/ComfyUI/models/clip/t5xxl_fp8_e4m3fn_scaled.safetensors
 
+RUN apt-get update -y && apt-get upgrade -y && apt-get install -y --no-install-recommends openssh-server && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /workspace/ComfyUI
 
 COPY requirements.txt /requirements.txt
