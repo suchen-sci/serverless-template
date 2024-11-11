@@ -1,0 +1,16 @@
+services:
+  builder:
+    image: $registry/$tenant_name/cosyVoice-serverless:builder
+    build:
+      context: .
+      target: builder
+      args:
+      - BASE_URL=$registry
+  cosyvoice-serverless:
+    image: $registry/$tenant_name/cosyvoice-serverless:cosyvoice
+    build:
+      context: .
+      target: cosyvoice
+      args:
+      - BASE_URL=$registry
+

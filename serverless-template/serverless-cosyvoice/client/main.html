@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <title>Client</title>
+    <link href="https://unpkg.com/layui@2.9.16/dist/css/layui.css" rel="stylesheet">
+    <style>
+        input {
+            width: 600px;
+            padding: 2px;
+            margin: 5px 0;
+            box-sizing: border-box;
+        }
+        textarea {
+            width: 600px;
+            height: 100px;
+            padding: 2px;
+            margin: 5px 0;
+            box-sizing: border-box;
+            resize: none;            
+        }
+        .status {
+            display: none;
+            height: 40px;
+            width: 40px;
+            margin-left: 30px;
+        }
+        .center{
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .layui-form-label{
+            width: 100px;
+        }
+        .layui-input-block{
+            margin-left: 130px;
+        }
+    </style>
+    <script src="./assets/layui.js"></script>
+    <script src="./assets/axios.min.js"></script>
+    <script src="client.js"></script>
+</head>
+
+<body>
+    <div id="app" style="padding-top: 50px;">
+        <div class="layui-row">
+            <div class="layui-col-md6 layui-col-md-offset3">
+                <h1 class="center">Cosyvoice Serverless Client Demo</h1>
+                <form class="layui-form" action="">
+                    <div class="layui-form-item">
+                      <label class="layui-form-label" required>whisper serverless ID</label>
+                      <div class="layui-input-block">
+                        <input type="text" id="whisperserverlessID" placeholder="请输入" value="cac81b9a6ca9" autocomplete="off" class="layui-input">
+                      </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">whisper API key</label>
+                        <div class="layui-input-block">
+                          <input type="text" id="whisperapiSecret" placeholder="请输入" value="669fce6a90864f2c9a13fb1e2bed6409" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">cosyvoice serverless ID</label>
+                        <div class="layui-input-block">
+                          <input type="text" id="cosyvoiceserverlessID" value="09020ecc2676" placeholder="请输入" autocomplete="off" class="layui-input">
+                        </div>
+                      </div>
+                      <div class="layui-form-item">
+                          <label class="layui-form-label">cosyvoice API key</label>
+                          <div class="layui-input-block">
+                            <input type="text" id="cosyvoiceapiSecret" value="08528b52bfab40618c3741bef56c51a4" placeholder="请输入" autocomplete="off" class="layui-input">
+                          </div>
+                      </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">音频base64</label>
+                        <div class="layui-input-block">
+                            <textarea id="base64_audio" placeholder="请输入内容" class="layui-textarea"></textarea>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">生成语音文案</label>
+                        <div class="layui-input-block">
+                          <input type="text" id="output_text" placeholder="请输入" value="你好呀，你吃了没,我可是吃的意大利面，老顶了" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <button type="button" onClick="queuePrompt()" class="layui-btn">生成</button>
+                    <audio id="mp3-data-url" src="" controls style="display: none;"></audio>
+
+                </form>
+              </div>
+        </div>
+        
+    </div>
+    <div style="height: 60px; align-content: center; text-align: center;"> <span id="message"></span><img id="status" class=status src="assets/loading.gif" /></div>
+    <div width="1024", height="1024" class="center">
+        <img id="result" src="" />
+    </div>
+</html>

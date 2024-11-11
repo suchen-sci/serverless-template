@@ -1,3 +1,5 @@
 # serverless-template
 
-官方Serverless模板仓库，附带谷歌浏览器测试用的插件
+### chrome-extension 插件源码地址
+
+### serverless-template serverless模板源码及示例
