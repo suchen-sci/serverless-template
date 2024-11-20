@@ -1,13 +1,12 @@
 /*
  * @Author: mulingyuer
- * @Date: 2024-10-28 16:45:58
- * @LastEditTime: 2024-10-30 16:26:09
+ * @Date: 2024-11-15 15:25:46
+ * @LastEditTime: 2024-11-19 16:47:21
  * @LastEditors: mulingyuer
  * @Description: 工具函数
- * @FilePath: \serverless-api-tester\src\utils\tools.ts
+ * @FilePath: \chrome-extension\src\utils\tools.ts
  * 怎么可能会有bug！！！
  */
-
 /** 写入持久化数据 */
 export async function localStorageSet(key: string, value: any) {
 	await chrome.storage.local.set({ [key]: value });
@@ -21,4 +20,42 @@ export async function localStorageGet(key: string, defaultValue: any) {
 		return defaultValue;
 	}
 	return value;
+}
+
+/** 将一个file对象转化为base64字符串 */
+export function fileToBase64(file: File) {
+	return new Promise<string>((resolve, reject) => {
+		const reader = new FileReader();
+
+		reader.onload = function (event) {
+			return resolve(event.target?.result as string);
+		};
+
+		reader.onerror = function (error) {
+			console.error("转换base64失败", error);
+			return reject(new Error("转换base64失败"));
+		};
+
+		reader.readAsDataURL(file);
+	});
+}
+
+/** 下载base64字符串的文件 */
+export function downloadBase64File(base64: string, fileName: string) {
+	const link = document.createElement("a");
+	link.href = base64;
+	link.download = fileName;
+	document.body.appendChild(link);
+	link.click();
+	document.body.removeChild(link);
+}
+
+/** 将图片file转成blob链接 */
+export function fileToBlobUrl(file: File) {
+	return URL.createObjectURL(file);
+}
+
+/** 将blob链接从内存中释放 */
+export function releaseBlobUrl(url: string) {
+	URL.revokeObjectURL(url);
 }

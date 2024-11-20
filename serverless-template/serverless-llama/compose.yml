@@ -1,0 +1,9 @@
+services:
+  ollama-serverless:
+    image: $registry/$tenant_name/ollama-serverless:ollama
+    build:
+      context: .
+      target: ollama
+      args:
+      - BASE_URL=$registry
+

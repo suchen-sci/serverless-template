@@ -1,7 +1,7 @@
 /*
  * @Author: mulingyuer
  * @Date: 2024-11-05 11:27:15
- * @LastEditTime: 2024-11-05 17:40:30
+ * @LastEditTime: 2024-11-20 11:09:23
  * @LastEditors: mulingyuer
  * @Description: tabs
  * @FilePath: \chrome-extension\src\background\tabs\index.ts
@@ -30,7 +30,7 @@ export class Tabs {
 			if (data.startsWith("data:image/")) {
 				chrome.storage.local.set({ Base64ImgData: data }, () => {
 					chrome.tabs.create({
-						url: chrome.runtime.getURL("pages/image-preview/index.html")
+						url: chrome.runtime.getURL("src/pages/image-preview/index.html")
 					});
 				});
 			} else {

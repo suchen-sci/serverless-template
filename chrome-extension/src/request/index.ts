@@ -1,13 +1,12 @@
 /*
  * @Author: mulingyuer
- * @Date: 2024-10-29 17:26:50
- * @LastEditTime: 2024-11-05 09:24:50
+ * @Date: 2024-11-15 15:39:36
+ * @LastEditTime: 2024-11-20 10:16:14
  * @LastEditors: mulingyuer
- * @Description: 请求
+ * @Description: 请求封装
  * @FilePath: \chrome-extension\src\request\index.ts
  * 怎么可能会有bug！！！
  */
-import { ChromeNotifications } from "@/utils/chrome-notifications";
 import ky from "ky";
 import type {
 	ArrayBufferOptions,
@@ -17,11 +16,11 @@ import type {
 	RequestOptions,
 	TextOptions
 } from "./types";
-import { MessagePlugin } from "tdesign-vue-next";
+import { MessagePlugin, NotifyPlugin } from "tdesign-vue-next";
 
 /** ky 实例 */
 const kyInstance = ky.create({
-	timeout: 3000000 // 单位ms, 30s
+	timeout: 3000000 // 单位ms, 90s
 });
 
 export function request<T>(op: JSONOptions): Promise<T>;
@@ -42,7 +41,10 @@ export async function request(options: RequestOptions): Promise<unknown> {
 				// 取消请求
 				MessagePlugin.info("请求已取消");
 			} else {
-				ChromeNotifications.error((error as Error)?.message ?? "请求失败");
+				NotifyPlugin.error({
+					title: "请求失败",
+					content: (error as Error)?.message ?? "未知错误"
+				});
 			}
 		}
 
