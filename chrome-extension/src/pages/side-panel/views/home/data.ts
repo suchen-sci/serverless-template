@@ -1,7 +1,7 @@
 /*
  * @Author: mulingyuer
  * @Date: 2024-11-05 10:51:07
- * @LastEditTime: 2024-11-20 09:03:51
+ * @LastEditTime: 2024-11-21 08:51:35
  * @LastEditors: mulingyuer
  * @Description: 本地数据
  * @FilePath: \chrome-extension\src\pages\side-panel\views\home\data.ts
@@ -10,7 +10,8 @@
 import comfyuiServerlessImg from "@side-panel/assets/images/home/data/comfyui-serverless-img.png";
 import sdxlText2imgImg from "@side-panel/assets/images/home/data/sdxlText2imgImg.png";
 import cosyvoiceImg from "@side-panel/assets/images/home/data/cosyvoice.png";
-import ollamaServerlessImg from "@side-panel/assets/images/home/data/ollama-serverless.png";
+import llamaVisionImg from "@side-panel/assets/images/home/data/llama3.2-vision.png";
+import whisperImg from "@side-panel/assets/images/home/data/whisper.png";
 
 export type List = Array<{
 	id: number;
@@ -44,6 +45,15 @@ export const HomeList: List = [
 	},
 	{
 		id: 3,
+		name: "whisper",
+		description: "通过Whisper 实现语音转文字",
+		detailUrl:
+			"https://serverless.datastone.cn/sprite/app/tmpl/serverless-detail?id=2&pyType=serverlessOfficial",
+		img: whisperImg,
+		routerName: "ServerlessWhisper"
+	},
+	{
+		id: 4,
 		name: "cosyvoice",
 		description: "使用 CosyVoice 进行声音克隆",
 		detailUrl:
@@ -52,11 +62,12 @@ export const HomeList: List = [
 		routerName: "ServerlessCosyvoice"
 	},
 	{
-		id: 4,
-		name: "ollama-serverless",
-		description: "使用 Ollama 模型实现一个OCR服务",
-		detailUrl: "",
-		img: ollamaServerlessImg,
-		routerName: "ServerlessOllamaServerless"
+		id: 5,
+		name: "llama3.2-vision",
+		description: "使用 llama3.2 vision 模型实现一个OCR服务",
+		detailUrl:
+			"https://serverless.datastone.cn/sprite/app/tmpl/serverless-detail?id=46&pyType=serverlessOfficial",
+		img: llamaVisionImg,
+		routerName: "ServerlessLlamaVision"
 	}
 ];

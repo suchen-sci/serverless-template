@@ -1,7 +1,7 @@
 /*
  * @Author: mulingyuer
  * @Date: 2024-11-05 09:42:57
- * @LastEditTime: 2024-11-20 09:06:47
+ * @LastEditTime: 2024-11-21 08:52:45
  * @LastEditors: mulingyuer
  * @Description: 路由
  * @FilePath: \chrome-extension\src\pages\side-panel\router\routes.ts
@@ -38,14 +38,19 @@ export const routes: RouteRecordRaw[] = [
 				component: () => import("@side-panel/views/sdxl-text2img/index.vue")
 			},
 			{
-				path: "/serverless/ollama-serverless",
-				name: "ServerlessOllamaServerless",
-				component: () => import("@side-panel/views/ollama-serverless/index.vue")
+				path: "/serverless/llama-vision",
+				name: "ServerlessLlamaVision",
+				component: () => import("@side-panel/views/llama-vision/index.vue")
 			},
 			{
 				path: "/serverless/cosyvoice",
 				name: "ServerlessCosyvoice",
 				component: () => import("@side-panel/views/cosyvoice/index.vue")
+			},
+			{
+				path: "/serverless/whisper",
+				name: "ServerlessWhisper",
+				component: () => import("@side-panel/views/whisper/index.vue")
 			}
 		]
 	}
