@@ -1,7 +1,7 @@
 /*
  * @Author: mulingyuer
  * @Date: 2024-11-11 11:58:04
- * @LastEditTime: 2024-11-20 10:56:03
+ * @LastEditTime: 2024-11-25 14:50:36
  * @LastEditors: mulingyuer
  * @Description: manifest 配置文件
  * @FilePath: \chrome-extension\manifest.config.ts
@@ -36,7 +36,8 @@ export default defineManifest(async (env) => {
 		],
 		background: {
 			service_worker: "src/background/background.ts",
-			type: "module"
+			type: "module",
+			persistent: true
 		},
 		action: {
 			default_title: "点击打开测试工具"
