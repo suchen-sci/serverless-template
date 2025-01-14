@@ -1,0 +1,7 @@
+# Please make sure you install the latest version of spirit-gpu
+# Check released versions on https://github.com/datastone-spirit/spirit-gpu/releases
+spirit-gpu
+vllm
+torch
+aiohttp >= 3.9.1
+bitsandbytes

@@ -1,0 +1,8 @@
+services:
+    vllm:
+        image: $registry/$tenant_name/vllm:vllm
+        build:
+            context: .
+            target: vllm
+            args:
+                - BASE_URL=$registry
