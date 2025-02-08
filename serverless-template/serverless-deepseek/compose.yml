@@ -1,0 +1,8 @@
+services:
+    deepseek:
+        image: $registry/$tenant_name/deepseek-r1:32b
+        build:
+            context: .
+            target: deepseek
+            args:
+                - BASE_URL=$registry
