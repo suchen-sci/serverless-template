@@ -5,15 +5,13 @@ echo "Container Started"
 export PYTHONUNBUFFERED=1
 
 # 启动 vLLM 服务
-vllm serve /workspace/deepseek/DeepSeek-R1-Distill-Qwen-32B-bnb-4bit \
-    --dtype half \
-    --load-format bitsandbytes \
-    --quantization bitsandbytes \
+vllm serve /workspace/deepseek/DeepSeek-R1-Distill-Qwen-32B-FP8-Dynamic \
+    --dtype bfloat16 \
     --port 11434 \
-    --max-model-len 8192 \
-    --gpu-memory-utilization 0.9 \
+    --max-model-len 6144 \
+    --gpu-memory-utilization 0.95 \
     --pipeline-parallel-size 2 \
-    --max-num-batched-tokens 8192 \
+    --max-num-batched-tokens 6144 \
     --max-num-seqs 32 &
 
 
