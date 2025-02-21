@@ -31,4 +31,8 @@ COPY start.sh /start.sh
 
 RUN chmod 755 /start.sh
 
+COPY relauncher.sh /relauncher.sh 
+
+RUN chmod 755 /relauncher.sh 
+
 CMD ["/start.sh"]
