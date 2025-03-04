@@ -1,14 +1,17 @@
-# serverless-CosyVoice 源码
+# 语音转文字 
 
-模型地址: https://github.com/FunAudioLLM/CosyVoice
-
-调用参数:
+语音转文字 模型地址: https://github.com/FunAudioLLM/SenseVoice
+文字转语音 https://github.com/rany2/edge-tts
 
 ```
+<!-- 参数 -->
 const prompt = {
-      output_text: output_text, // 输出音频文案
-      origin_audio_text: origin_audio_text, // 音频文案
-      audio_base64: base64str, // 音频
+      input: {
+        type: 'speech2text', // speech2text 语音转文字     text2speech 文字转语音
+        file: '', // base64音频或需朗读的文字
+      }
     };
+
+<!-- 响应结果 -->
+{data: '结果'}
 ```
-具体使用细节，参考client目录
