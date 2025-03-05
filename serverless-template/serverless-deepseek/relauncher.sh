@@ -10,7 +10,9 @@ MAX_NUM_BATCHED_TOKENS=${SERVERLESS_MAX_NUM_BATCHED_TOKENS:-6144}
 # Set the pipeline parallel size to the number of GPUs
 PIPELINE_PARALLEL_SIZE=${GPU_COUNT:-2}
 
-echo "MAX_MODEL_LEN: is ${MAX_MODEL_LEN}, MAX_NUM_BATCHED_TOKENS: is ${MAX_NUM_BATCHED_TOKENS}, and PIPELINE_PARALLEL_SIZE: is ${PIPELINE_PARALLEL_SIZE}"
+GPU_MEMORY_UTILIZATION=${SERVERLESS_GPU_MEMORY_UTILIZATION:-0.95}
+
+echo "MAX_MODEL_LEN: is ${MAX_MODEL_LEN}, MAX_NUM_BATCHED_TOKENS: is ${MAX_NUM_BATCHED_TOKENS}, and PIPELINE_PARALLEL_SIZE: is ${PIPELINE_PARALLEL_SIZE}, GPU_MEMORY_UTILIZATION is: ${GPU_MEMORY_UTILIZATION} "
 
 
 n=0
@@ -21,7 +23,7 @@ while true; do
     fi
 
     # 启动 vLLM 服务
-    LAUNCH_CMD="vllm serve /workspace/deepseek/DeepSeek-R1-Distill-Qwen-32B-FP8-Dynamic --dtype bfloat16 --port 11434 --max-model-len ${MAX_MODEL_LEN} --gpu-memory-utilization 0.95 --pipeline-parallel-size ${PIPELINE_PARALLEL_SIZE} --max-num-batched-tokens ${MAX_NUM_BATCHED_TOKENS} --max-num-seqs 32"
+    LAUNCH_CMD="vllm serve /workspace/deepseek/DeepSeek-R1-Distill-Qwen-32B-FP8-Dynamic --dtype bfloat16 --port 11434 --max-model-len ${MAX_MODEL_LEN} --gpu-memory-utilization ${GPU_MEMORY_UTILIZATION} --pipeline-parallel-size ${PIPELINE_PARALLEL_SIZE} --max-num-batched-tokens ${MAX_NUM_BATCHED_TOKENS} --max-num-seqs 32"
 
     echo "Starting with command: $LAUNCH_CMD"
     eval $LAUNCH_CMD
