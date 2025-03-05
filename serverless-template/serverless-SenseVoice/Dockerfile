@@ -1,5 +1,5 @@
 ARG BASE_URL
-FROM ${BASE_URL}/library/cuda-12.1.1-cudnn-devel-ubuntu22.04:py311-builder-torch251 AS senseVoice
+FROM ${BASE_URL}/library/cuda-12.1.1-cudnn-devel-ubuntu22.04:py311-builder-torch251 AS sensevoice
 
 RUN curl -L  https://github.com/git-lfs/git-lfs/releases/download/v3.2.0/git-lfs-linux-amd64-v3.2.0.tar.gz \
     -o /root/git-lfs-linux-amd64-v3.2.0.tar.gz && cd /root/ && \

@@ -6,6 +6,7 @@ import base64
 import os
 import uuid
 from pathlib import Path
+import emoji
 import edge_tts
 import asyncio
 
@@ -24,12 +25,19 @@ def config_logging():
     )
 
 
-async def text_to_base64_audio(text: str) -> str:
+def remove_emoji(text: str) -> str:
+    """
+    去掉字符串中的 emoji 表情。
+    """
+    return emoji.replace_emoji(text, replace="")
+
+
+async def text_to_base64_audio(text: str, voice: str) -> str:
     """
     将文本转换为音频并返回Base64编码的音频数据。
     """
     # 创建Communicate对象
-    communicate = edge_tts.Communicate(text=text, voice="zh-CN-XiaoxiaoNeural")
+    communicate = edge_tts.Communicate(text=text, voice=voice)
 
     # 生成临时音频文件
     temp_dir = "/workspace/FunAudioLLM/temp_audio"
@@ -96,13 +104,17 @@ def generate_audio_handler(base64_audio: str) -> str:
     res = model.generate(
         input=audio_file_path,
         cache={},
-        language="auto",  # "zh", "en", "yue", "ja", "ko", "nospeech"
+        language="auto",
         use_itn=True,
         batch_size_s=60,
         merge_vad=True,
         merge_length_s=15,
+        ban_emo_unk=False,
     )
     text = rich_transcription_postprocess(res[0]["text"])
+
+    # 去掉 emoji 表情
+    text = remove_emoji(text)
     os.remove(audio_file_path)
 
     return text
@@ -115,12 +127,13 @@ def start_handler():
         request_input = request.get("input", {})
         file = request_input.get("file")
         type = request_input.get("type")
+        voice = request_input.get("voice", "zh-CN-XiaoxiaoNeural")
 
         # 根据 type 调用不同的处理函数
         if type == "speech2text":
             data = generate_audio_handler(file)
         else:
-            data = await text_to_base64_audio(file)
+            data = await text_to_base64_audio(file, voice)
         # 构造响应
         response = {"data": data}
         return response

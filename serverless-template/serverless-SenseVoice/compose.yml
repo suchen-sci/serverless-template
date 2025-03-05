@@ -1,6 +1,6 @@
 services:
   builder:
-    image: $registry/$tenant_name/cosyVoice-serverless:builder
+    image: $registry/$tenant_name/sensevoice-serverless:builder
     build:
       context: .
       target: builder
