@@ -23,7 +23,7 @@ while true; do
     fi
 
     # 启动 vLLM 服务
-    LAUNCH_CMD="vllm serve /workspace/deepseek/DeepSeek-R1-Distill-Qwen-32B-FP8-Dynamic --dtype bfloat16 --port 11434 --max-model-len ${MAX_MODEL_LEN} --gpu-memory-utilization ${GPU_MEMORY_UTILIZATION} --pipeline-parallel-size ${PIPELINE_PARALLEL_SIZE} --max-num-batched-tokens ${MAX_NUM_BATCHED_TOKENS} --max-num-seqs 32"
+    LAUNCH_CMD="vllm serve /workspace/deepseek/DeepSeek-R1-Distill-Qwen-1.5B --port 11434"
 
     echo "Starting with command: $LAUNCH_CMD"
     eval $LAUNCH_CMD

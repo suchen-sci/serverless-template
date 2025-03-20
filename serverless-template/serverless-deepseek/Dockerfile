@@ -8,16 +8,15 @@ RUN curl -L  https://github.com/git-lfs/git-lfs/releases/download/v3.2.0/git-lfs
 
 RUN pip install --break-system-packages -U huggingface_hub[cli]
 
-RUN mkdir -p /root/models_cache/DeepSeek-R1-Distill-Qwen-32B-FP8-Dynamic && \
-    cd /root/models_cache/DeepSeek-R1-Distill-Qwen-32B-FP8-Dynamic && \
-    huggingface-cli download getfit/DeepSeek-R1-Distill-Qwen-32B-FP8-Dynamic --local-dir .
-
+RUN mkdir -p /root/models_cache/DeepSeek-R1-Distill-Qwen-1.5B && \
+    cd /root/models_cache/DeepSeek-R1-Distill-Qwen-1.5B && \
+    huggingface-cli download deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B --local-dir .
 
 FROM ${BASE_URL}/library/cuda-12.1.1-cudnn-devel-ubuntu22.04:py311-builder-torch251 AS deepseek
 
-WORKDIR /workspace/deepseek/DeepSeek-R1-Distill-Qwen-32B-FP8-Dynamic
+WORKDIR /workspace/deepseek/DeepSeek-R1-Distill-Qwen-1.5B
 
-COPY --from=model-builder /root/models_cache/DeepSeek-R1-Distill-Qwen-32B-FP8-Dynamic/ /workspace/deepseek/DeepSeek-R1-Distill-Qwen-32B-FP8-Dynamic/
+COPY --from=model-builder /root/models_cache/DeepSeek-R1-Distill-Qwen-1.5B/ /workspace/deepseek/DeepSeek-R1-Distill-Qwen-1.5B/
 
 COPY requirements.txt /requirements.txt
 

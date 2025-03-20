@@ -1,5 +1,5 @@
 import aiohttp
-from spirit_gpu import start, logger
+from .spirit_gpu import start, logger
 
 base_url = "http://127.0.0.1:11434"
 
