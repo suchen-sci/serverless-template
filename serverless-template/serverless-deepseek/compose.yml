@@ -1,6 +1,6 @@
 services:
     deepseek:
-        image: $registry/$tenant_name/deepseek-r1:32b
+        image: $registry/$tenant_name/deepseek-r1:1b
         build:
             context: .
             target: deepseek
